@@ -8,7 +8,7 @@ export default function Home() {
       <div
         className={`${lusitana.className} flex flex-col items-center mt-5 md:mt-30`}
       >
-        <div className="relative bg-blue-500 border-t-[15px] border-l-[15px] border-r-[15px] border-b-[26px] border-l-transparent border-r-transparent border-b-transparent border-t-transparent rounded-3xl gap-6">
+        <div className="relative bg-blue-500 border-[15px] border-blue border-transparent rounded-3xl gap-6">
           <p className="text-center text-4xl md:text-6xl text-gray-200">
             TodoApp
           </p>
