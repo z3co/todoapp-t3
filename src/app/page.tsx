@@ -9,20 +9,21 @@ export default function Home() {
         className={`${lusitana.className} flex flex-col items-center mt-5 md:mt-30`}
       >
         <div className="relative bg-blue-500 border-[15px] border-blue border-transparent rounded-3xl gap-6">
-          <p className="text-center text-4xl md:text-6xl text-gray-200">
+          <p className="text-center text-4xl md:text-6xl text-white">
             TodoApp
           </p>
-          <p className="text-xl md:text-4xl text-gray-300 mt-4 ">
+          <p className="text-xl md:text-4xl text-white mt-4 ">
             The best way to manage your day
           </p>
         </div>
         <div className="flex flex-col items-center">
-          <div className="m-30 md:m-50">
+          <div className="m-8 md:m-12">
             {/* Put pictures of the dashboard here */}
           </div>
           <Link
             href="/dashboard"
             className={`${inter.className} flex items-center gap-5 m-4 rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base`}
+            aria-label="Navigate to dashboard"
           >
             <span>Get started</span> <ArrowRightIcon className="w-5 md:w-6" />
           </Link>
