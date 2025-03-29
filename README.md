@@ -8,7 +8,6 @@
 - [ ] Creating editing and deleting todos
 - [ ] Remove finished todos after 1 day
 - [ ] Create onboarding for new users
-- [ ] Making filters work
+- [ ] Making filters work for better todo management
 - [ ] Making priorities work, and figuring out what to do with them
 
-## 29/03/2025
