@@ -10,3 +10,5 @@
 - [ ] Create onboarding for new users
 - [ ] Making filters work
 - [ ] Making priorities work, and figuring out what to do with them
+
+## 29/03/2025
