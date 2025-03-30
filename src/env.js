@@ -11,6 +11,12 @@ export const env = createEnv({
 		NODE_ENV: z
 			.enum(["development", "test", "production"])
 			.default("development"),
+
+		SINGLESTORE_PASS: z.string(),
+		SINGLESTORE_USER: z.string(),
+		SINGLESTORE_HOST: z.string(),
+		SINGLESTORE_PORT: z.string(),
+		SINGLESTORE_DB_NAME: z.string(),
 	},
 
 	/**
@@ -27,9 +33,14 @@ export const env = createEnv({
 	 * middlewares) or client-side so we need to destruct manually.
 	 */
 	runtimeEnv: {
+		SINGLESTORE_PASS: process.env.DATABASE_URL,
+		SINGLESTORE_USER: process.env.SINGLESTORE_USER,
+		SINGLESTORE_HOST: process.env.SINGLESTORE_HOST,
+		SINGLESTORE_PORT: process.env.SINGLESTORE_PORT,
+		SINGLESTORE_DB_NAME: process.env.SINGLESTORE_DB_NAME,
+
 		DATABASE_URL: process.env.DATABASE_URL,
 		NODE_ENV: process.env.NODE_ENV,
-		// NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 	},
 	/**
 	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
