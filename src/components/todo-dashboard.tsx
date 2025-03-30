@@ -16,8 +16,6 @@ interface PriorityColors {
 	high: string;
 }
 
-// Mock data for todos
-
 // Priority badge colors
 const priorityColors: PriorityColors = {
 	low: "bg-blue-100 text-blue-800",
