@@ -9,7 +9,7 @@ import {
 } from "drizzle-orm/singlestore-core";
 
 export const createTable = singlestoreTableCreator(
-	(name) => `todoapp-t3_${name}`,
+	(name) => `todoapp_t3_${name}`,
 );
 
 export const todo_table = createTable(

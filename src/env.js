@@ -33,7 +33,7 @@ export const env = createEnv({
 	 * middlewares) or client-side so we need to destruct manually.
 	 */
 	runtimeEnv: {
-		SINGLESTORE_PASS: process.env.DATABASE_URL,
+		SINGLESTORE_PASS: process.env.SINGLESTORE_PASS,
 		SINGLESTORE_USER: process.env.SINGLESTORE_USER,
 		SINGLESTORE_HOST: process.env.SINGLESTORE_HOST,
 		SINGLESTORE_PORT: process.env.SINGLESTORE_PORT,

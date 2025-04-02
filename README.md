@@ -11,3 +11,10 @@
 - [ ] Making filters work for better todo management
 - [ ] Making priorities work, and figuring out what to do with them
 
+## 30/03/2025
+
+Just connected singlestore database with application next steps are:
+
+- [x] Make the schemas
+- [ ] Connects ui to database
+- [ ] TODO Actually update the status after a checkbox is checked at the moment we are only updating the state

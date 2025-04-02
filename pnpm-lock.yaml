@@ -79,7 +79,7 @@ importers:
         specifier: ^0.30.5
         version: 0.30.6
       eslint:
-        specifier: ^9
+        specifier: ^9.23.0
         version: 9.23.0(jiti@2.4.2)
       eslint-config-next:
         specifier: 15.2.4
