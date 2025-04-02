@@ -16,9 +16,9 @@ export const todo_table = createTable(
 	"todo_table",
 	{
 		id: bigint("id", { mode: "number", unsigned: true }).primaryKey().autoincrement(),
-		title: text("name").notNull(),
-		completed: boolean("age").notNull(),
-		priority: singlestoreEnum(["low", "medium", "high"]).notNull(),
+		title: text("title").notNull(),
+		completed: boolean("completed").notNull(),
+		priority: singlestoreEnum("priority", ["low", "medium", "high"]).notNull(),
 		ownerId: text("owner_id").notNull(),
 		createdAt: timestamp("created_at").notNull().defaultNow(),
 	},
