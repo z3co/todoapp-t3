@@ -1,9 +1,8 @@
 import TodoDashboard from "~/components/todo-dashboard";
-import { db } from "~/server/db";
-import { todo_table } from "~/server/db/schema";
+import { getTodos } from "~/server/db/queries";
 
 export default async function DashboardPage() {
-  const todos = await db.select().from(todo_table);
+  const todos = await getTodos();
   return (
     <main className="min-h-screen bg-gray-50">
       <TodoDashboard initialTodos={todos} />
