@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
-//
+
 // Types for the result object with discriminated union
 type Success<T> = {
   data: T;
@@ -18,7 +18,18 @@ type Failure<E> = {
 
 type Result<T, E = Error> = Success<T> | Failure<E>;
 
-// Main wrapper function
+/**
+ * @description
+ * Wraps a promise in a try-catch block and returns a standardized Result object
+ * 
+ * @example
+ * const result = await tryCatch(fetchTodos());
+ * if (result.error) {
+ *   // Handle error case
+ * } else {
+ *   // Handle success with result.data
+ * }
+ */
 export async function tryCatch<T, E = Error>(
   promise: Promise<T>,
 ): Promise<Result<T, E>> {
