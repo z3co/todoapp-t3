@@ -169,8 +169,10 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                 className="col-span-3"
                 placeholder="Enter todo title"
                 autoFocus
-                onKeyDown={async () => {
-                  await handleSubmit()
+                onKeyDown={async (e) => {
+                  if (e.key === "Enter") {
+                    await handleSubmit();
+                  }
                 }}
               />
             </div>
@@ -188,7 +190,7 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
             <Button
               className="bg-blue-600 hover:bg-blue-700"
               onClick={async () => {
-                await handleSubmit()
+                await handleSubmit();
               }}
               disabled={todoTitle.trim() === ""}
             >
