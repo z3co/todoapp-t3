@@ -6,7 +6,7 @@
 - [x] Setup a database with singlestore
 - [x] Create database schemas and tables
 - [x] Connecting ui to database
-- [ ] Adding auth with clerk
+- [x] Adding auth with clerk
 - [ ] Creating editing and deleting todos
 - [ ] Remove finished todos after 1 day
 - [ ] Create onboarding for new users
@@ -24,5 +24,5 @@ Just connected singlestore database with application next steps are:
 
 Just connected the dashboard content to singlestore dashboard the next steps are
 
-- [ ] Setting up a clerk account and project
+- [x] Setting up a clerk account and project
 - [ ] Adding auth with clerk and connecting todo to users
