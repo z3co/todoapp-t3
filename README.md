@@ -12,17 +12,13 @@
 - [ ] Create onboarding for new users
 - [ ] Making filters work for better todo management
 - [ ] Making priorities work, and figuring out what to do with them
+- [ ] Adding suspense and loading to dashboard page
 
-## 30/03/2025
+## 05/04/2025
 
-Just connected singlestore database with application next steps are:
+Just setup auth with clerk and only fetches todos related to your userId next up are
 
-- [x] Make the schemas
-- [x] Connect ui to database
-
-## 03/04/2025
-
-Just connected the dashboard content to singlestore dashboard the next steps are
-
-- [x] Setting up a clerk account and project
-- [ ] Adding auth with clerk and connecting todo to users
+- [ ] Creating todos
+- [ ] Editing todos
+- [ ] Updating todo status to completed in db when checked
+- [ ] Deleting todos
