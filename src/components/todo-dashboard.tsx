@@ -1,13 +1,24 @@
 "use client";
 
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "~/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Checkbox } from "~/components/ui/checkbox";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import type { DB_TodoType } from "~/server/db/schema";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { addTodo } from "~/lib/actions";
+import { useRouter } from "next/navigation";
 
 // Define types using TypeScript interfaces
 
@@ -25,17 +36,19 @@ const priorityColors: PriorityColors = {
 };
 
 export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
-  const { initialTodos } = props;
-  const [todos, setTodos] = useState<DB_TodoType[]>(initialTodos);
+  const navigate = useRouter();
+
+  const { initialTodos: todos } = props;
 
   // Mock function to toggle todo completion
   const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
+    todos.map((todo) =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo,
     );
   };
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [todoTitle, setTodoTitle] = useState("");
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -52,7 +65,10 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
           <CardTitle className="font-bold text-2xl">
             TodoApp Dashboard
           </CardTitle>
-          <Button className="bg-blue-600 hover:bg-blue-700">
+          <Button
+            onClick={() => setIsDialogOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
             <Plus className="mr-2 h-4 w-4" /> New Todo
           </Button>
         </CardHeader>
@@ -125,6 +141,59 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
           </div>
         </CardContent>
       </Card>
+
+      {/* New Todo Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add New Todo</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="title" className="text-right">
+                Title
+              </Label>
+              <Input
+                id="title"
+                value={todoTitle}
+                onChange={(e) => setTodoTitle(e.target.value)}
+                className="col-span-3"
+                placeholder="Enter todo title"
+                onKeyDown={async (e) => {
+                  if (e.key === "Enter") {
+                    await addTodo(todoTitle);
+                    setTodoTitle("");
+                    setIsDialogOpen(false);
+                  }
+                }}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsDialogOpen(false);
+                setTodoTitle("");
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={async () => {
+                setTodoTitle("");
+                await addTodo(todoTitle);
+                setIsDialogOpen(false);
+                navigate.refresh();
+              }}
+              disabled={todoTitle.trim() === ""}
+            >
+              Add Todo
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
