@@ -1,9 +1,12 @@
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import TodoDashboard from "~/components/todo-dashboard";
-import { db } from "~/server/db";
-import { todo_table } from "~/server/db/schema";
+import { QUERIES } from "~/server/db/queries";
 
 export default async function DashboardPage() {
-  const todos = await db.select().from(todo_table);
+  const user = await auth();
+  if (!user.userId) return redirect("/");
+  const todos = await QUERIES.getTodos(user.userId);
   return (
     <main className="min-h-screen bg-gray-50">
       <TodoDashboard initialTodos={todos} />

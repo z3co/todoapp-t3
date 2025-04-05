@@ -7,6 +7,7 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Checkbox } from "~/components/ui/checkbox";
 import type { DB_TodoType } from "~/server/db/schema";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 // Define types using TypeScript interfaces
 
@@ -38,6 +39,14 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <div className="m-2 flex justify-end">
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </div>
       <Card className="shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="font-bold text-2xl">
