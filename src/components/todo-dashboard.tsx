@@ -46,6 +46,15 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
       todo.id === id ? { ...todo, completed: !todo.completed } : todo,
     );
   };
+  const handleSubmit = async () => {
+    if (todoTitle.trim() === "") return;
+    await addTodo(todoTitle);
+    setTodoTitle("");
+    setIsDialogOpen(false);
+    navigate.refresh();
+  };
+
+  // Then use in both the onKeyDown and onClick handlers
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [todoTitle, setTodoTitle] = useState("");
@@ -159,12 +168,9 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                 onChange={(e) => setTodoTitle(e.target.value)}
                 className="col-span-3"
                 placeholder="Enter todo title"
-                onKeyDown={async (e) => {
-                  if (e.key === "Enter") {
-                    await addTodo(todoTitle);
-                    setTodoTitle("");
-                    setIsDialogOpen(false);
-                  }
+                autoFocus
+                onKeyDown={async () => {
+                  await handleSubmit()
                 }}
               />
             </div>
@@ -182,10 +188,7 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
             <Button
               className="bg-blue-600 hover:bg-blue-700"
               onClick={async () => {
-                setTodoTitle("");
-                await addTodo(todoTitle);
-                setIsDialogOpen(false);
-                navigate.refresh();
+                await handleSubmit()
               }}
               disabled={todoTitle.trim() === ""}
             >

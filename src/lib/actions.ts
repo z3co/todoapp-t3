@@ -1,8 +1,8 @@
 "use server";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { db } from "~/server/db";
-import { todo_table } from "~/server/db/schema";
+import { MUTATIONS } from "~/server/db/queries";
+import type { todo_table } from "~/server/db/schema";
 
 export async function addTodo(todoTitle: string) {
   const session = await auth();
@@ -17,6 +17,6 @@ export async function addTodo(todoTitle: string) {
     ownerId: session.userId,
   };
 
-  await db.insert(todo_table).values(newTodo);
-  revalidatePath("/dashboard")
+  await MUTATIONS.insertTodo(newTodo);
+  revalidatePath("/dashboard");
 }
