@@ -19,6 +19,7 @@ import { Label } from "~/components/ui/label";
 import type { DB_TodoType } from "~/server/db/schema";
 import { addTodo } from "~/lib/actions";
 import { useRouter } from "next/navigation";
+import { tryCatch } from "~/lib/utils";
 
 // Define types using TypeScript interfaces
 
@@ -48,7 +49,13 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
   };
   const handleSubmit = async () => {
     if (todoTitle.trim() === "") return;
-    await addTodo(todoTitle);
+    const { error } = await tryCatch(addTodo(todoTitle));
+    if (error) {
+      console.error("Something went wrong while creating your todo", error);
+      throw new Error(
+        `Something went wrong while creating your error: ${error}`,
+      );
+    }
     setTodoTitle("");
     setIsDialogOpen(false);
     navigate.refresh();

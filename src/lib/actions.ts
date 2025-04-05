@@ -7,9 +7,9 @@ import type { todo_table } from "~/server/db/schema";
 export async function addTodo(todoTitle: string) {
   const session = await auth();
 
-  if (!session.userId) return;
+  if (!session.userId) throw new Error("User not authorized");
 
-  if (todoTitle === "") return;
+  if (todoTitle === "") throw new Error("Empty title??");
   const newTodo: typeof todo_table.$inferInsert = {
     title: todoTitle,
     completed: false,
