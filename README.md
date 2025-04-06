@@ -20,6 +20,6 @@
 Just setup auth with clerk and only fetches todos related to your userId next up are
 
 - [x] Creating todos
-- [ ] Deleting todos
+- [x] Deleting todos
 - [ ] Editing todos
 - [ ] Updating todo status to completed in db when checked

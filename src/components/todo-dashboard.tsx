@@ -1,7 +1,7 @@
 "use client";
 
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -20,6 +20,7 @@ import type { DB_TodoType } from "~/server/db/schema";
 import { addTodo } from "~/lib/actions";
 import { useRouter } from "next/navigation";
 import { tryCatch } from "~/lib/utils";
+import { DeleteTodo } from "./todo-buttons";
 
 // Define types using TypeScript interfaces
 
@@ -143,14 +144,7 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                     <Pencil className="h-4 w-4" />
                     <span className="sr-only">Edit</span>
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-red-600"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    <span className="sr-only">Delete</span>
-                  </Button>
+                  <DeleteTodo id={todo.id} />
                 </div>
               </div>
             ))}
