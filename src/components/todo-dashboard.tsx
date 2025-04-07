@@ -17,9 +17,8 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import type { DB_TodoType } from "~/server/db/schema";
-import { addTodo } from "~/lib/actions";
+import { addTodo, editTodo } from "~/lib/actions";
 import { useRouter } from "next/navigation";
-import { tryCatch } from "~/lib/utils";
 import { DeleteTodo } from "./todo-buttons";
 
 // Define types using TypeScript interfaces
@@ -48,14 +47,15 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
       todo.id === id ? { ...todo, completed: !todo.completed } : todo,
     );
   };
-  const handleSubmit = async () => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleSubmit = async (todoId: number) => {
     if (todoTitle.trim() === "") return;
-    const { error } = await tryCatch(addTodo(todoTitle));
-    if (error) {
-      console.error("Something went wrong while creating your todo", error);
-      throw new Error(
-        `Something went wrong while creating your error: ${error}`,
-      );
+    if (todoId === 0) return;
+    if (isEditing) {
+      await editTodo(todoId, { title: todoTitle });
+    } else {
+      await addTodo(todoTitle);
     }
     setTodoTitle("");
     setIsDialogOpen(false);
@@ -66,6 +66,7 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [todoTitle, setTodoTitle] = useState("");
+  const [todoId, setTodoId] = useState(0);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -83,7 +84,10 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
             TodoApp Dashboard
           </CardTitle>
           <Button
-            onClick={() => setIsDialogOpen(true)}
+            onClick={() => {
+              setIsEditing(false);
+              setIsDialogOpen(true);
+            }}
             className="bg-blue-600 hover:bg-blue-700"
           >
             <Plus className="mr-2 h-4 w-4" /> New Todo
@@ -136,14 +140,24 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                   </Badge>
                 </div>
                 <div className="flex gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-blue-600"
+                  <form
+                    action={() => {
+                      setTodoId(todo.id);
+                      setTodoTitle(todo.title);
+                      setIsEditing(true);
+                      setIsDialogOpen(true);
+                    }}
                   >
-                    <Pencil className="h-4 w-4" />
-                    <span className="sr-only">Edit</span>
-                  </Button>
+                    <Button
+                      type="submit"
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-blue-600"
+                    >
+                      <Pencil className="h-4 w-4" />
+                      <span className="sr-only">Edit</span>
+                    </Button>
+                  </form>
                   <DeleteTodo id={todo.id} />
                 </div>
               </div>
@@ -156,7 +170,7 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add New Todo</DialogTitle>
+            <DialogTitle>{isEditing ? "Edit todo" : "Add new todo"}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -172,7 +186,7 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                 autoFocus
                 onKeyDown={async (e) => {
                   if (e.key === "Enter") {
-                    await handleSubmit();
+                    await handleSubmit(todoId);
                   }
                 }}
               />
@@ -191,11 +205,11 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
             <Button
               className="bg-blue-600 hover:bg-blue-700"
               onClick={async () => {
-                await handleSubmit();
+                await handleSubmit(todoId);
               }}
               disabled={todoTitle.trim() === ""}
             >
-              Add Todo
+            { isEditing ? "Update todo" : "Add todo"}
             </Button>
           </DialogFooter>
         </DialogContent>
