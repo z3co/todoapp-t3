@@ -1,7 +1,7 @@
 "use client";
 
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { Pencil, Plus } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -17,9 +17,8 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import type { DB_TodoType } from "~/server/db/schema";
-import { addTodo, editTodo } from "~/lib/actions";
+import { addTodo, deleteTodo, editTodo } from "~/lib/actions";
 import { useRouter } from "next/navigation";
-import { DeleteTodo } from "./todo-buttons";
 
 // Define types using TypeScript interfaces
 
@@ -39,32 +38,51 @@ const priorityColors: PriorityColors = {
 export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
   const navigate = useRouter();
 
-  const { initialTodos: todos } = props;
-
   // Mock function to toggle todo completion
   // I have not added state for todos yet so this comes later
-  //const toggleTodo = (id: number) => {
-  //  todos.map((todo) =>
-  //    todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-  //  );
-  //};
   const [isEditing, setIsEditing] = useState(false);
+  const [todos, setTodos] = useState(props.initialTodos);
+
+  const toggleTodo = async (todoId: number) => {
+    setTodos((prevTodos) => {
+      if (!prevTodos) return [];
+      return prevTodos.map((todo) =>
+        todo.id === todoId ? { ...todo, completed: !todo.completed } : todo,
+      );
+    });
+    const index = todos.findIndex((todo) => todo.id === todoId);
+    await editTodo(todoId, { completed: !todos[index]?.completed });
+  };
+
+  //const updateTodoState = (id: number) => {
+
+  //};
 
   const handleSubmit = async (todoId: number) => {
     if (todoTitle.trim() === "") return;
-    if (todoId <= 0) return;
+    if (todoId < 0) return;
     try {
       if (isEditing) {
+        setTodos((prevTodos) => {
+          if (!prevTodos) return [];
+          return prevTodos.map((todo) =>
+            todo.id === todoId ? { ...todo, title: todoTitle } : todo,
+          );
+        });
+        setIsDialogOpen(false);
         await editTodo(todoId, { title: todoTitle });
       } else {
-        await addTodo(todoTitle);
+        const newTodo = await addTodo(todoTitle);
+        setTodos((prevTodos) =>
+          newTodo[0] ? [...prevTodos, newTodo[0]] : prevTodos,
+        );
+        setIsDialogOpen(false);
       }
     } catch {
       console.error("Issue while adding or updating todo");
       // User friendly error handling comes later
     }
     setTodoTitle("");
-    setIsDialogOpen(false);
     navigate.refresh();
   };
 
@@ -92,6 +110,7 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
           <Button
             onClick={() => {
               setIsEditing(false);
+              setTodoId(0);
               setIsDialogOpen(true);
             }}
             className="bg-blue-600 hover:bg-blue-700"
@@ -131,9 +150,7 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                 <div className="flex items-center gap-3">
                   <Checkbox
                     checked={todo.completed}
-                    onCheckedChange={
-                      () => console.log("Checked") /*toggleTodo(todo.id) */
-                    }
+                    onCheckedChange={() => toggleTodo(todo.id)}
                     className="border-blue-400 data-[state=checked]:border-blue-600 data-[state=checked]:bg-blue-600"
                   />
                   <span
@@ -162,7 +179,36 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                     <Pencil className="h-4 w-4" />
                     <span className="sr-only">Edit</span>
                   </Button>
-                  <DeleteTodo id={todo.id} />
+                  <form
+                    action={() => {
+                      const deleteTodoWithId = deleteTodo.bind(null, todo.id);
+                      setTodos((prevTodos) => {
+                        if (!prevTodos) return [];
+                        const index = prevTodos.findIndex(
+                          (prevTodo) => prevTodo.id === todo.id,
+                        );
+                        if (index === -1) return prevTodos;
+
+                        const newTodos = [
+                          ...prevTodos.slice(0, index),
+                          ...prevTodos.slice(index + 1),
+                        ];
+
+                        return newTodos;
+                      });
+                      deleteTodoWithId();
+                    }}
+                  >
+                    <Button
+                      type="submit"
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sr-only">Delete</span>
+                    </Button>
+                  </form>
                 </div>
               </div>
             ))}
