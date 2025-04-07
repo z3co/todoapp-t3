@@ -42,20 +42,26 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
   const { initialTodos: todos } = props;
 
   // Mock function to toggle todo completion
-  const toggleTodo = (id: number) => {
-    todos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-    );
-  };
+  // I have not added state for todos yet so this comes later
+  //const toggleTodo = (id: number) => {
+  //  todos.map((todo) =>
+  //    todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+  //  );
+  //};
   const [isEditing, setIsEditing] = useState(false);
 
   const handleSubmit = async (todoId: number) => {
     if (todoTitle.trim() === "") return;
-    if (todoId === 0) return;
-    if (isEditing) {
-      await editTodo(todoId, { title: todoTitle });
-    } else {
-      await addTodo(todoTitle);
+    if (todoId <= 0) return;
+    try {
+      if (isEditing) {
+        await editTodo(todoId, { title: todoTitle });
+      } else {
+        await addTodo(todoTitle);
+      }
+    } catch {
+      console.error("Issue while adding or updating todo");
+      // User friendly error handling comes later
     }
     setTodoTitle("");
     setIsDialogOpen(false);
@@ -66,7 +72,7 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [todoTitle, setTodoTitle] = useState("");
-  const [todoId, setTodoId] = useState(0);
+  const [todoId, setTodoId] = useState(-1);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -125,7 +131,9 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                 <div className="flex items-center gap-3">
                   <Checkbox
                     checked={todo.completed}
-                    onCheckedChange={() => toggleTodo(todo.id)}
+                    onCheckedChange={
+                      () => console.log("Checked") /*toggleTodo(todo.id) */
+                    }
                     className="border-blue-400 data-[state=checked]:border-blue-600 data-[state=checked]:bg-blue-600"
                   />
                   <span
@@ -140,24 +148,20 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                   </Badge>
                 </div>
                 <div className="flex gap-2">
-                  <form
-                    action={() => {
+                  <Button
+                    onClick={() => {
                       setTodoId(todo.id);
                       setTodoTitle(todo.title);
                       setIsEditing(true);
                       setIsDialogOpen(true);
                     }}
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-blue-600"
                   >
-                    <Button
-                      type="submit"
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-blue-600"
-                    >
-                      <Pencil className="h-4 w-4" />
-                      <span className="sr-only">Edit</span>
-                    </Button>
-                  </form>
+                    <Pencil className="h-4 w-4" />
+                    <span className="sr-only">Edit</span>
+                  </Button>
                   <DeleteTodo id={todo.id} />
                 </div>
               </div>
@@ -170,7 +174,9 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{isEditing ? "Edit todo" : "Add new todo"}</DialogTitle>
+            <DialogTitle>
+              {isEditing ? "Edit todo" : "Add new todo"}
+            </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -209,7 +215,7 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
               }}
               disabled={todoTitle.trim() === ""}
             >
-            { isEditing ? "Update todo" : "Add todo"}
+              {isEditing ? "Update todo" : "Add todo"}
             </Button>
           </DialogFooter>
         </DialogContent>
