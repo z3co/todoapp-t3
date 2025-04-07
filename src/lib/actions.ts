@@ -48,8 +48,8 @@ export async function editTodo(
   );
 
   if (error) {
-    console.error("An error occured while updating todo", error);
-    return error;
+    console.error("An error occurred while updating todo", error);
+    throw new Error("Could not update todo");
   }
   revalidatePath("/dashboard");
 }
