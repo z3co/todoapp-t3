@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { redirect } from "next/navigation";
 import { inter, lusitana } from "~/app/ui/fonts";
-import { Button } from "~/components/ui/button";
+import Link from "next/link";
 
 export default async function Home() {
   return (
@@ -20,25 +20,13 @@ export default async function Home() {
           <div className="m-8 md:m-12">
             {/* Put pictures of the dashboard here */}
           </div>
-          <form action={async () => {
-            "use server";
-
-            const session = await auth();
-            if (!session.userId) {
-              return redirect("/sign-in")
-            }
-
-            return redirect("/dashboard")
-          }}>
-          <Button
-            type="submit"
-            size="lg"
+          <Link
+            href={"/sign-in"}
             className={`${inter.className} m-4 flex items-center gap-5 rounded-lg bg-blue-500 px-6 py-3 font-medium text-sm text-white transition-colors hover:bg-blue-400 md:text-base`}
             aria-label="Navigate to dashboard"
           >
             <span>Get started</span> <ArrowRightIcon className="w-5 md:w-6" />
-          </Button>
-          </form>
+          </Link>
         </div>
       </div>
     </main>
