@@ -31,6 +31,25 @@ export async function deleteTodo(todoId: number) {
     MUTATIONS.deleteTodo(todoId, session.userId),
   );
 
-  if (error) throw new Error("Could not delete todo")
-  revalidatePath("/dashboard")
+  if (error) throw new Error("Could not delete todo");
+  revalidatePath("/dashboard");
+}
+
+export async function editTodo(
+  todoId: number,
+  newData: { title: string } | { completed: boolean },
+) {
+  const session = await auth();
+
+  if (!session.userId) throw new Error("User not authorized");
+
+  const { error } = await tryCatch(
+    MUTATIONS.updateTodo(todoId, newData, session.userId),
+  );
+
+  if (error) {
+    console.error("An error occurred while updating todo", error);
+    throw new Error("Could not update todo");
+  }
+  revalidatePath("/dashboard");
 }

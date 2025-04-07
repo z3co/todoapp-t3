@@ -13,6 +13,7 @@
 - [ ] Create onboarding for new users
 - [ ] Making filters work for better todo management
 - [ ] Making priorities work, and figuring out what to do with them
+- [ ] Adding proper error handling
 - [x] Adding suspense and loading to dashboard page
 
 ## 05/04/2025
@@ -21,5 +22,5 @@ Just setup auth with clerk and only fetches todos related to your userId next up
 
 - [x] Creating todos
 - [x] Deleting todos
-- [ ] Editing todos
+- [x] Editing todos
 - [ ] Updating todo status to completed in db when checked

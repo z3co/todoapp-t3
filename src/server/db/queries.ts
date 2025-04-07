@@ -24,4 +24,15 @@ export const MUTATIONS = {
       .where(and(eq(todoSchema.id, id), eq(todoSchema.ownerId, userId)))
       .limit(1);
   },
+  updateTodo: async (
+    id: number,
+    newData: { title: string } | { completed: boolean },
+    userId: string,
+  ) => {
+    await db
+      .update(todoSchema)
+      .set(newData)
+      .where(and(eq(todoSchema.id, id), eq(todoSchema.ownerId, userId)))
+      .limit(1);
+  },
 };
