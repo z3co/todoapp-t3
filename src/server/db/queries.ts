@@ -2,7 +2,7 @@ import "server-only";
 
 import { db } from ".";
 import { todo_table as todoSchema } from "./schema";
-import { eq, desc, and, asc } from "drizzle-orm";
+import { eq, and, asc } from "drizzle-orm";
 
 export const QUERIES = {
   getTodos: async (userId: string) => {
