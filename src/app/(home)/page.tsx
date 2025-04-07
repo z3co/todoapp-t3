@@ -1,6 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import { redirect } from "next/navigation";
 import { inter, lusitana } from "~/app/ui/fonts";
 import Link from "next/link";
 
