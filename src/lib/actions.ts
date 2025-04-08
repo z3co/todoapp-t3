@@ -22,7 +22,7 @@ export async function addTodo(todoTitle: string) {
   revalidatePath("/dashboard");
   if (newTodoId.length === 0) throw new Error("Failed to insert todo");
   if (!newTodoId[0]) throw new Error("Failed to insert todo");
-  const DBTodo = QUERIES.getTodoById(newTodoId[0].id, session.userId);
+  const DBTodo = await QUERIES.getTodoById(newTodoId[0].id, session.userId);
   return DBTodo;
 }
 
