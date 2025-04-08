@@ -180,23 +180,39 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                     <span className="sr-only">Edit</span>
                   </Button>
                   <form
-                    action={() => {
+                    action={async () => {
                       const deleteTodoWithId = deleteTodo.bind(null, todo.id);
+                      // Store the current todo for potential restoration
+                      const todoToDelete = todos.find(t => t.id === todo.id);
+                      const todoIndex = todos.findIndex(t => t.id === todo.id);
+                      
                       setTodos((prevTodos) => {
                         if (!prevTodos) return [];
                         const index = prevTodos.findIndex(
                           (prevTodo) => prevTodo.id === todo.id,
                         );
                         if (index === -1) return prevTodos;
-
+      
                         const newTodos = [
                           ...prevTodos.slice(0, index),
                           ...prevTodos.slice(index + 1),
                         ];
-
+      
                         return newTodos;
                       });
-                      deleteTodoWithId();
+                      try {
+                        await deleteTodoWithId();
+                      } catch (error) {
+                        // Restore the deleted todo if the operation fails
+                        if (todoToDelete && todoIndex !== -1) {
+                          setTodos(prevTodos => {
+                            const newTodos = [...prevTodos];
+                            newTodos.splice(todoIndex, 0, todoToDelete);
+                            return newTodos;
+                          });
+                        }
+                        console.error("Failed to delete todo:", error);
+                      }
                     }}
                   >
                     <Button
