@@ -1,14 +1,15 @@
 # TODO
 
-- [ ] TODO Actually update the status after a checkbox is checked at the moment we are only updating the state
+- [x] TODO Actually update the status after a checkbox is checked at the moment we are only updating the state
 
 - [x] Add a home and dashboard page ui
 - [x] Setup a database with singlestore
 - [x] Create database schemas and tables
 - [x] Connecting ui to database
 - [x] Adding auth with clerk
-- [ ] Creating editing and deleting todos
+- [x] Creating editing and deleting todos
 - [x] Adding state to dashboard todos
+- [ ] Adding analytics with posthog
 - [ ] Remove finished todos after 1 day
 - [ ] Create onboarding for new users
 - [ ] Making filters work for better todo management

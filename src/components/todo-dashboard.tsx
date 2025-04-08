@@ -72,10 +72,10 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
         setIsDialogOpen(false);
         await editTodo(todoId, { title: todoTitle });
       } else {
-        const newTodoResult = await addTodo(todoTitle);
-        if (Array.isArray(newTodoResult) && newTodoResult.length > 0) {
-          setTodos((prevTodos) => newTodoResult[0] ? [...prevTodos, newTodoResult[0]] : prevTodos);
-        }
+        const newTodo = await addTodo(todoTitle);
+        setTodos((prevTodos) =>
+          newTodo ? [...prevTodos, newTodo] : prevTodos,
+        );
         setIsDialogOpen(false);
       }
     } catch {
