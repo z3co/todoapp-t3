@@ -1,7 +1,7 @@
 "use server";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { MUTATIONS } from "~/server/db/queries";
+import { MUTATIONS, QUERIES } from "~/server/db/queries";
 import type { todo_table } from "~/server/db/schema";
 import { tryCatch } from "./utils";
 
@@ -18,8 +18,12 @@ export async function addTodo(todoTitle: string) {
     ownerId: session.userId,
   };
 
-  await MUTATIONS.insertTodo(newTodo);
+  const newTodoId = await MUTATIONS.insertTodo(newTodo);
   revalidatePath("/dashboard");
+  if (newTodoId.length === 0) throw new Error("Failed to insert todo");
+  if (!newTodoId[0]) throw new Error("Failed to insert todo");
+  const DBTodo = await QUERIES.getTodoById(newTodoId[0].id, session.userId);
+  return DBTodo;
 }
 
 export async function deleteTodo(todoId: number) {

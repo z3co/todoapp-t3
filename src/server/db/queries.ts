@@ -2,21 +2,28 @@ import "server-only";
 
 import { db } from ".";
 import { todo_table as todoSchema } from "./schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, and, asc } from "drizzle-orm";
 
 export const QUERIES = {
-  getTodos: (userId: string) => {
-    return db
+  getTodos: async (userId: string) => {
+    return await db
       .select()
       .from(todoSchema)
       .where(eq(todoSchema.ownerId, userId))
-      .orderBy(desc(todoSchema.title));
+      .orderBy(asc(todoSchema.createdAt));
+  },
+  getTodoById: async (id: number, userId: string) => {
+    return await db
+      .select()
+      .from(todoSchema)
+      .where(and(eq(todoSchema.id, id), eq(todoSchema.ownerId, userId)))
+      .limit(1);
   },
 };
 
 export const MUTATIONS = {
-  insertTodo: (todo: typeof todoSchema.$inferInsert) => {
-    return db.insert(todoSchema).values(todo);
+  insertTodo: async (todo: typeof todoSchema.$inferInsert) => {
+    return db.insert(todoSchema).values(todo).$returningId();
   },
   deleteTodo: async (id: number, userId: string) => {
     await db
