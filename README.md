@@ -9,19 +9,19 @@
 - [x] Adding auth with clerk
 - [x] Creating editing and deleting todos
 - [x] Adding state to dashboard todos
-- [ ] Adding analytics with posthog
+- [x] Adding analytics with posthog
 - [ ] Remove finished todos after 1 day
-- [ ] Create onboarding for new users
 - [ ] Making filters work for better todo management
 - [ ] Making priorities work, and figuring out what to do with them
 - [ ] Adding proper error handling
 - [x] Adding suspense and loading to dashboard page
 
-## 05/04/2025
+## This projects is done for now
+I dont want to work on it anymore i have what i wanted and i have learned all i can from this
 
-Just setup auth with clerk and only fetches todos related to your userId next up are
+## 08/04/2025
 
-- [x] Creating todos
-- [x] Deleting todos
-- [x] Editing todos
-- [x] Updating todo status to completed in db when checked
+Just added analytics with posthog next up are
+
+- [ ] Removing completed todos after 1 day
+- [ ] Creating onboarding for users
