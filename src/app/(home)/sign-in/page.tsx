@@ -1,12 +1,7 @@
 import { SignInButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import { lusitana } from "~/app/ui/fonts";
 
 export default async function Home() {
-  const session = await auth();
-
-  if (session.userId) redirect("/dashboard");
   return (
     <main>
       <div
