@@ -124,19 +124,31 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
               {todos.filter((todo) => !todo.completed).length} tasks remaining
             </div>
             <div className="flex gap-2">
-              <Button
+              {/**<Button
+                onClick={() => {
+                  console.log("This was harder than expected")
+                }}
                 variant="outline"
                 size="sm"
                 className="border-blue-200 text-blue-600"
               >
                 All
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button
+                onClick={() => {
+                  setTodos(todos.filter((todo) => !todo.completed));
+                }}
+                variant="ghost"
+                size="sm"
+              >
                 Active
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button onClick={() => {
+                setTodos(todos.filter((todo) => todo.completed))
+              }} variant="ghost" size="sm">
                 Completed
               </Button>
+              */}
             </div>
           </div>
 
@@ -183,21 +195,23 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                     action={async () => {
                       const deleteTodoWithId = deleteTodo.bind(null, todo.id);
                       // Store the current todo for potential restoration
-                      const todoToDelete = todos.find(t => t.id === todo.id);
-                      const todoIndex = todos.findIndex(t => t.id === todo.id);
-                      
+                      const todoToDelete = todos.find((t) => t.id === todo.id);
+                      const todoIndex = todos.findIndex(
+                        (t) => t.id === todo.id,
+                      );
+
                       setTodos((prevTodos) => {
                         if (!prevTodos) return [];
                         const index = prevTodos.findIndex(
                           (prevTodo) => prevTodo.id === todo.id,
                         );
                         if (index === -1) return prevTodos;
-      
+
                         const newTodos = [
                           ...prevTodos.slice(0, index),
                           ...prevTodos.slice(index + 1),
                         ];
-      
+
                         return newTodos;
                       });
                       try {
@@ -205,7 +219,7 @@ export default function TodoDashboard(props: { initialTodos: DB_TodoType[] }) {
                       } catch (error) {
                         // Restore the deleted todo if the operation fails
                         if (todoToDelete && todoIndex !== -1) {
-                          setTodos(prevTodos => {
+                          setTodos((prevTodos) => {
                             const newTodos = [...prevTodos];
                             newTodos.splice(todoIndex, 0, todoToDelete);
                             return newTodos;
