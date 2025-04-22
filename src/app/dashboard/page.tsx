@@ -7,9 +7,10 @@ export default async function DashboardPage() {
   const user = await auth();
   if (!user.userId) return redirect("/");
   try {
-  const todos = await QUERIES.getTodos(user.userId);
+    const todos = await QUERIES.getTodos(user.userId);
+    console.log("Todos: ", todos);
   } catch(error) {
-    console.log("Error getting todos:", error);
+    console.log("Error getting todos: ", error);
   }
   return (
     <main className="min-h-screen bg-gray-50">
