@@ -8,6 +8,7 @@ export default async function DashboardPage() {
   if (!user.userId) return redirect("/");
   try {
     const todos = await QUERIES.getTodos(user.userId);
+    if (!todos) return (<p>Error</p>)
     console.log("Todos: ", todos);
   } catch(error) {
     console.error("Error getting todos: ", error);
