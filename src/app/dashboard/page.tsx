@@ -10,7 +10,7 @@ export default async function DashboardPage() {
     const todos = await QUERIES.getTodos(user.userId);
     console.log("Todos: ", todos);
   } catch(error) {
-    console.log("Error getting todos: ", error);
+    console.error("Error getting todos: ", error);
   }
   return (
     <main className="min-h-screen bg-gray-50">
